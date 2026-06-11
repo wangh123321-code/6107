@@ -111,11 +111,16 @@ export function calculateRacketParams(
     RUBBER_AREA_CM2 * backhandRubber.weight * (1 + backhandSponge / 10);
   const weight = blade.weight + fhWeight + bhWeight;
 
+  const fhHardness = forehandRubber.spongeHardness + (forehandSponge - 1.5) * 15;
+  const bhHardness = backhandRubber.spongeHardness + (backhandSponge - 1.5) * 15;
+  const hardness = (fhHardness * W_FH + bhHardness * W_BH) / (W_FH + W_BH);
+
   return {
     speed: Math.round(speed),
     spin: Math.round(spin),
     control: Math.round(control),
     elasticity: Math.round(elasticity),
     weight: Math.round(weight),
+    hardness: Math.round(hardness * 10) / 10,
   };
 }

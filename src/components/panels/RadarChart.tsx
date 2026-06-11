@@ -24,6 +24,7 @@ export default function RadarChart() {
     { subject: '控制', value: params.control, fullMark: 100 },
     { subject: '弹性', value: params.elasticity, fullMark: 100 },
     { subject: '重量', value: Math.min(100, Math.max(0, (params.weight - 150) * 2 + 50)), fullMark: 100 },
+    { subject: '硬度', value: Math.min(100, Math.max(0, ((params.hardness - 30) / 20) * 100)), fullMark: 100 },
   ], [params]);
 
   return (

@@ -37,7 +37,7 @@ function computeParams(config: RacketConfig): RacketParams {
   const backhand = getRubberById(config.backhandRubberId);
 
   if (!blade || !forehand || !backhand) {
-    return { speed: 50, spin: 50, control: 50, elasticity: 50, weight: 150 };
+    return { speed: 50, spin: 50, control: 50, elasticity: 50, weight: 150, hardness: 37 };
   }
 
   return calculateRacketParams(

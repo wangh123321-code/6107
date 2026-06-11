@@ -29,6 +29,7 @@ export interface RubberModel {
   name: string;
   type: RubberType;
   spongeThickness: number[];
+  spongeHardness: number;
   speed: number;
   spin: number;
   control: number;
@@ -45,6 +46,7 @@ export interface RacketParams {
   control: number;
   elasticity: number;
   weight: number;
+  hardness: number;
 }
 
 export interface RacketConfig {

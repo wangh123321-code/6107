@@ -1,4 +1,4 @@
-import { Gauge, Zap, RotateCw, Target, TrendingUp, Weight, Scissors, Move } from 'lucide-react';
+import { Gauge, Zap, RotateCw, Target, TrendingUp, Weight, Scissors, Move, Diamond, Hand } from 'lucide-react';
 import RadarChart from './RadarChart';
 import { useRacketStore } from '@/store/useRacketStore';
 import { getBladeById } from '@/data/blades';
@@ -12,6 +12,7 @@ const PARAM_CONFIG = [
   { key: 'control', name: '控制', icon: Target, color: 'text-blue-400', bg: 'bg-blue-500/10' },
   { key: 'elasticity', name: '弹性', icon: TrendingUp, color: 'text-yellow-400', bg: 'bg-yellow-500/10' },
   { key: 'weight', name: '重量', icon: Weight, color: 'text-purple-400', bg: 'bg-purple-500/10' },
+  { key: 'hardness', name: '硬度', icon: Diamond, color: 'text-orange-400', bg: 'bg-orange-500/10' },
 ] as const;
 
 export default function ParamsPanel() {
@@ -26,6 +27,41 @@ export default function ParamsPanel() {
 
   const totalThickness = blade.thickness + config.forehandSponge + config.backhandSponge + 0.16;
 
+  const feelTip = useMemo(() => {
+    const h = Math.round(params.hardness);
+    if (h < 37) {
+      return {
+        label: '软弹持球型',
+        range: '30-36°',
+        color: 'text-green-400',
+        bg: 'bg-green-500/15',
+        border: 'border-green-500/30',
+        dot: 'bg-green-400',
+        desc: '海绵柔软吃球深，持球时间长，旋转强，适合弧圈结合控制打法，发力要求较低。',
+      };
+    }
+    if (h <= 43) {
+      return {
+        label: '均衡全面型',
+        range: '37-43°',
+        color: 'text-yellow-400',
+        bg: 'bg-yellow-500/15',
+        border: 'border-yellow-500/30',
+        dot: 'bg-yellow-400',
+        desc: '硬度适中攻守兼备，速度与控制平衡，适合中近台快攻结合弧圈的全能打法。',
+      };
+    }
+    return {
+      label: '硬弹快攻型',
+      range: '44-50°',
+      color: 'text-red-400',
+      bg: 'bg-red-500/15',
+      border: 'border-red-500/30',
+      dot: 'bg-red-400',
+      desc: '海绵硬弹出球快，一速强劲，适合近台快攻和弹击打法，需较好的发力基础。',
+    };
+  }, [params.hardness]);
+
   return (
     <div className="h-full flex flex-col bg-[#1a1b26]/95 backdrop-blur-xl border-l border-white/10">
       <div className="p-4 border-b border-white/10">
@@ -33,7 +69,7 @@ export default function ParamsPanel() {
           <Gauge size={18} className="text-orange-400" />
           <h2 className="text-base font-bold text-white tracking-wide">性能参数</h2>
         </div>
-        <p className="text-xs text-gray-500">五维雷达图实时展示</p>
+        <p className="text-xs text-gray-500">六维雷达图实时展示</p>
       </div>
 
       <div className="flex-1 overflow-y-auto custom-scrollbar">
@@ -45,10 +81,12 @@ export default function ParamsPanel() {
           <div className="grid grid-cols-1 gap-2 mb-4">
             {PARAM_CONFIG.map((p) => {
               const Icon = p.icon;
-              const value = p.key === 'weight' ? params.weight : (params[p.key] as number);
-              const displayValue = p.key === 'weight' ? `${value}g` : value;
+              const value = p.key === 'weight' ? params.weight : p.key === 'hardness' ? params.hardness : (params[p.key] as number);
+              const displayValue = p.key === 'weight' ? `${value}g` : p.key === 'hardness' ? `${value}°` : value;
               const percentage = p.key === 'weight'
                 ? Math.min(100, Math.max(0, ((value - 140) / 80) * 100))
+                : p.key === 'hardness'
+                ? Math.min(100, Math.max(0, ((value - 30) / 20) * 100))
                 : (value as number);
 
               return (
@@ -71,6 +109,7 @@ export default function ParamsPanel() {
                         p.key === 'control' && 'bg-gradient-to-r from-blue-500 to-blue-400',
                         p.key === 'elasticity' && 'bg-gradient-to-r from-yellow-500 to-yellow-400',
                         p.key === 'weight' && 'bg-gradient-to-r from-purple-500 to-purple-400',
+                        p.key === 'hardness' && 'bg-gradient-to-r from-orange-500 to-orange-400',
                       )}
                       style={{ width: `${percentage}%` }}
                     />
@@ -78,6 +117,22 @@ export default function ParamsPanel() {
                 </div>
               );
             })}
+          </div>
+
+          <div className={clsx('rounded-2xl border p-4 mb-4', feelTip.bg, feelTip.border)}>
+            <h3 className="text-sm font-bold text-gray-200 mb-3 flex items-center gap-2">
+              <Hand size={14} className={feelTip.color} />
+              手感提示
+            </h3>
+            <div className="flex items-center gap-2 mb-2">
+              <span className={clsx('inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold', feelTip.bg, feelTip.color)}>
+                <span className={clsx('w-1.5 h-1.5 rounded-full', feelTip.dot)} />
+                {feelTip.label}
+              </span>
+              <span className="text-xs text-gray-500">{feelTip.range}</span>
+              <span className={clsx('text-sm font-bold ml-auto', feelTip.color)}>{params.hardness}°</span>
+            </div>
+            <p className="text-xs text-gray-400 leading-relaxed">{feelTip.desc}</p>
           </div>
 
           <div className="bg-white/5 rounded-2xl border border-white/10 p-4 mb-4">
