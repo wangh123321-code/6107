@@ -1,0 +1,14 @@
+node_modules
+dist
+.git
+.gitignore
+.trae
+*.md
+Dockerfile
+docker-compose.yml
+.dockerignore
+npm-debug.log
+.DS_Store
+.env
+.env.local
+.env.*.local
