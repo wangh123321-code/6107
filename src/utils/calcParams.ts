@@ -4,7 +4,7 @@ const W_BLADE = 0.55;
 const W_FH = 0.28;
 const W_BH = 0.17;
 
-const RUBBER_AREA_CM2 = 45;
+const RUBBER_AREA_CM2 = 450;
 
 type SynergyFactors = {
   speed: number;

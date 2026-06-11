@@ -84,7 +84,7 @@ export default function ParamsPanel() {
               const value = p.key === 'weight' ? params.weight : p.key === 'hardness' ? params.hardness : (params[p.key] as number);
               const displayValue = p.key === 'weight' ? `${value}g` : p.key === 'hardness' ? `${value}°` : value;
               const percentage = p.key === 'weight'
-                ? Math.min(100, Math.max(0, ((value - 140) / 80) * 100))
+                ? Math.min(100, Math.max(0, ((value - 150) / 70) * 100))
                 : p.key === 'hardness'
                 ? Math.min(100, Math.max(0, ((value - 30) / 20) * 100))
                 : (value as number);
